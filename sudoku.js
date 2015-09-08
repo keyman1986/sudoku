@@ -14,9 +14,9 @@ Array.prototype.contains = function(v){
 String.prototype.contains = function(v){
     return this.indexOf(v) >= 0;
 }
-//create all the squares and unitlists
-for(var i=0;i < letters.length;i++){
-    for(var j=0;j< digits.length;j++){
+
+for(var i=0; i < letters.length; i++){
+    for(var j=0; j< digits.length; j++){
         var row = letters[i];
         var col = digits[j];
         var name = row+col;
@@ -52,7 +52,7 @@ function assign(values, s, d){
     
     for (var i=0; i < otherVals.length;i++){
         if(!eliminate(values,s,otherVals[i])){
-            return false; //contradiction encountered.
+            return false;
         }
     }
     
@@ -82,14 +82,23 @@ function parseGrid(grid){
     return values;
 }
 
-
 function eliminate(values,s,d){
-  // here
+    if (!values[s].contains(d)){
+        return values;
+    }
+        values[s] = values[s].replace(d,"");
+    if (values[s].length === 1){
+        peers[s].forEach(function(peer){
+            eliminate(values,peer,values[s]);
+        });
+    }
+    return values;
 }
-
 
 function draw(values){
     for(var key in values){
         document.getElementById(key).innerHTML = values[key]; 
     }
 }
+var x = parseGrid(puzzle);
+draw(x);
